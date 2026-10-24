@@ -1,0 +1,56 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Embed test</title>
+<style>
+  body{font-family:sans-serif;margin:24px}
+  .modal{position:fixed;inset:4% 4%;background:#fff;border:1px solid #ccc;box-shadow:0 8px 40px rgba(0,0,0,.3);display:none;flex-direction:column;z-index:10}
+  .modal.open{display:flex}
+  .modal header{padding:10px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee}
+  .modal .framewrap{flex:1;position:relative}
+  .modal iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  button{font-size:16px;padding:10px 16px;margin-right:10px}
+</style></head>
+<body>
+<h1>Embed construction test</h1>
+<button id="mapBtn">Open map popup</button>
+<button id="wxBtn">Open weather popup</button>
+
+<div class="modal" id="mapModal">
+  <header><span>Google Maps directions embed (lazy, paint-first)</span><button onclick="document.getElementById('mapModal').classList.remove('open')">Close</button></header>
+  <div class="framewrap" id="mapWrap"></div>
+</div>
+<div class="modal" id="wxModal">
+  <header><span>Windy embed</span><button onclick="document.getElementById('wxModal').classList.remove('open')">Close</button></header>
+  <div class="framewrap" id="wxWrap"></div>
+</div>
+
+<script>
+document.getElementById('mapBtn').addEventListener('click', function(){
+  var m = document.getElementById('mapModal');
+  m.classList.add('open');
+  setTimeout(function(){
+    if(!document.getElementById('mapFrame')){
+      var f = document.createElement('iframe');
+      f.id = 'mapFrame';
+      f.src = 'https://www.google.com/maps?saddr=Surrey,+BC&daddr=Kamloops,+BC+to:Revelstoke,+BC&output=embed';
+      f.setAttribute('sandbox','allow-scripts allow-same-origin allow-popups');
+      f.setAttribute('referrerpolicy','no-referrer-when-downgrade');
+      f.setAttribute('allowfullscreen','');
+      document.getElementById('mapWrap').appendChild(f);
+    }
+  }, 60);
+});
+document.getElementById('wxBtn').addEventListener('click', function(){
+  var m = document.getElementById('wxModal');
+  m.classList.add('open');
+  setTimeout(function(){
+    if(!document.getElementById('wxFrame')){
+      var f = document.createElement('iframe');
+      f.id = 'wxFrame';
+      f.src = 'https://embed.windy.com/embed2.html?lat=50.998&lon=-118.196&detailLat=50.998&detailLon=-118.196&width=650&height=450&zoom=7&level=surface&overlay=wind&product=ecmwf&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=true&metricWind=km%2Fh&metricTemp=%C2%B0C&radarRange=-1';
+      f.setAttribute('sandbox','allow-scripts allow-same-origin allow-popups');
+      document.getElementById('wxWrap').appendChild(f);
+    }
+  }, 60);
+});
+</script>
+</body></html>
